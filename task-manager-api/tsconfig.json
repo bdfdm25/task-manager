@@ -16,6 +16,15 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+     "paths": {
+      "@exceptions/*": ["src/shared/exceptions/*"],
+      "@interceptors/*": ["src/shared/interceptors/*"],
+      "@decorators/*": ["src/shared/decorators/*"],
+      "@utils/*": ["src/shared/utils/*"],
+      "@auth/*": ["src/auth/*"],
+      "@tasks/*": ["src/tasks/*"],
+      "@test/*": ["./test/*"]
+    }
   }
 }
