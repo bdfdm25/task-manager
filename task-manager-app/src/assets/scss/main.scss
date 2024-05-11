@@ -1,0 +1,28 @@
+body {
+  -ms-overflow-style: none;
+  height: 100%;
+  background: $main-content-background !important;
+  font-family: $primary-font !important;
+}
+
+html {
+  height: 100%;
+  line-height: 1.429;
+  overflow-x: hidden;
+  -ms-overflow-style: none;
+}
+
+.content-container {
+  padding: 2rem;
+}
+
+.add-btn {
+  margin-left: $add-btn-margin-left;
+  color: $add-btn-dark-color;
+  background-color: $add-btn-light-background-color;
+  transition: 0.5s;
+}
+
+.add-btn:hover {
+  background-color: $add-btn-hover-color;
+}

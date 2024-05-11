@@ -1,0 +1,7 @@
+<div *ngIf="(showSignUp$ | async); else signInForm">
+  <app-signup></app-signup>
+</div>
+
+<ng-template #signInForm>
+  <app-signin></app-signin>
+</ng-template>

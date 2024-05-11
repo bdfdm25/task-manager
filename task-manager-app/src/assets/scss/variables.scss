@@ -1,0 +1,137 @@
+// fonts
+$primary-font: 'Poppins-Regular', sans-serif;
+$bold-font: 'Poppins-Bold', sans-serif;
+$medium-font: 'Poppins-Medium', sans-serif;
+$black-font: 'Poppins-Black', sans-serif;
+$light-font: 'Poppins-Light', sans-serif;
+
+/*------SCROLLBAR------*/
+// dimensions
+$scrollbar-height: 0.25rem;
+
+// colors
+$scrollbar-background-color: #e4e3e3; 
+$scrollbar-thumb-color: #222831;
+$scrollbar-hover-color: #555;
+
+/*-----GENERAL------*/
+// btn dimensions
+$add-btn-margin-left: 2rem;
+
+// colors
+$add-btn-dark-color: #000;
+$add-btn-light-background-color: #FFF;
+$add-btn-light-color: #FFF;
+$add-btn-dark-background-color: #000;
+$add-btn-hover-color: #EEEEEE;
+$column-border-color: #e4e3e3;
+
+//border dimensions
+$column-border-width: 0.05rem;
+
+/*------MAIN CONTENT------*/
+// distance
+$main-content-margin-left: 5rem;
+$main-content-padding: 1rem;
+
+// colors
+$main-content-background: #F9F9F9;
+
+
+/*------LOGIN------*/
+
+// font size
+$title: 24px;
+$subtitle: 16px;
+$form-text: 14px;
+
+// img size
+$login-img-size: 50%;
+$login-img-size-tablet: 35%;
+$login-img-size-mobile-large: 50%;
+
+// btn size
+$login-btn-width: 100%;
+$signup-btn-margin-top: 2rem;
+
+// colors
+$login-light-font-color: #FFF;
+$login-dark-background: #222831;
+$login-light-background: #F9F9F9;
+$login-btn-hover-color: #393E46;
+
+// distance
+$login-form-margin-top: 8%;
+$login-form-height: 30rem;
+$login-form-height-mobile-large: 26rem;
+$login-padding-top: 4rem;
+$login-padding-top-mobile-large: 3rem;
+$login-img-padding-top: 3rem;
+$login-form-padding: 2rem 4rem;
+
+// borders
+$login-form-borders: 0 15px 15px 0;
+$login-form-borders-tablet: 0 0 15px 15px;
+$login-welcome-borders: 15px 0 0 15px;
+$login-welcome-borders-tablet: 15px 15px 0 0;
+$login-btn-borders: 10px;
+
+/*------NAVBAR------*/
+
+// colors
+$navbar-light-background: #FFF;
+$navbar-dark-background: #222831;
+$navbar-dark-font: #222831;
+$navbar-hover-color: #393E46;
+$navbar-light-font: #FFF;
+
+
+// distance
+$navbar-width: 5rem;
+$navbar-item-width: 5rem;
+$navbar-height: 100vh;
+$navbar-padding: 0;
+$navbar-icon-padding: 1rem 0.5rem;
+
+/*------INCOMES------*/
+// distance
+$card-content-margin-top: 1rem;
+$income-name-margin-left: 2rem;
+$income-date-margin-top: 0.25rem;
+$income-data-row-margin-top: 2rem;
+$income-data-row-padding-bottom: 1.5rem;
+
+// colors
+$income-icon-color: #79D70F;
+
+// font-size
+$date-font-size: 12px;
+
+/*------EXPENSES------*/
+// distance
+$expenses-row-margin-top: 2rem;
+$expense-value-margin-left: 0.5rem;
+$expense-margin-top: 1.5rem;
+
+// font-size
+$expense-date: 14px;
+
+
+/*------NEW DATA MODAL------*/
+
+// font-size
+$new-data-modal-title: 14px;
+$monthly-check-label: 12px;
+
+// borders
+$new-data-modal-no-border: none;
+$new-data-modal-borders: 1px solid #E8EAE6;
+
+// distance
+$new-data-modal-body-margin-top: 1rem;
+$new-data-modal-body-margin-bottom: 1rem;
+$new-data-modal-body-padding-right: 3rem;
+
+// colors
+$new-data-modal-input-background: #F5F4F4;
+
