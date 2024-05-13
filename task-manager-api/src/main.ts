@@ -18,6 +18,7 @@ async function bootstrap() {
     adapter,
   );
 
+  app.enableCors();
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new TransformInterceptor());
   app.setGlobalPrefix('api', {});
