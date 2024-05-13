@@ -1,27 +1,30 @@
 # TaskManagerApp
 
+> The instructions shown below are to execute only the frontend app locally. To have the full experience with the app, you must execute the API locally as well.
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.7.
 
-## Development server
+## Requirements
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+[NodeJS](https://nodejs.org/en): ~v20.0.0
 
-## Code scaffolding
+## Installing
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+To install the project dependencies, go to the project root folder `~/task-manager/task-manager-app/` and execute `npm install`.
+
+## Running locally
+
+Run `npm run start` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
 ## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Run `npm run test` to execute the unit tests via [Jest](https://jestjs.io/).
+Run `npm run test:coverage` to execute the unit tests coverage. The coverage report will be stored at the root of the project, under the coverage directory.
 
-## Running end-to-end tests
+## Further help & contact
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+To get more help on how to run the application locally, any insights or just to have a talk, you can find me [here](https://www.linkedin.com/in/brenofelicio/).
