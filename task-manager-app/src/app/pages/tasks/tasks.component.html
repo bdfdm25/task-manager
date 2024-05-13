@@ -1,1 +1,28 @@
-<p>tasks works!</p>
+<div class="flex flex-col justify-center items-center">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <app-tasks-header [username]="username"></app-tasks-header>
+
+    <app-loading *ngIf="loading$ | async; else taskList"></app-loading>
+
+    <ng-template #taskList>
+      <div *ngIf="(error$ | async) as error"
+        class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+        <strong class="font-bold">Error!</strong>
+        <span class="block sm:inline ml-4">{{ error }}</span>
+      </div>
+
+      <div *ngIf="(tasks$ | async) as tasks; else noTasks"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 overflow-auto h-[32rem] lg:h-fit">
+        <app-task-card *ngFor="let task of tasks" [task]="task"></app-task-card>
+      </div>
+
+    </ng-template>
+
+    <ng-template #noTasks>
+      <div class="text-center mt-4">
+        <h2 class="text-2xl">no tasks found</h2>
+      </div>
+    </ng-template>
+
+  </div>
+</div>

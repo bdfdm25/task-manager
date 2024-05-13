@@ -7,23 +7,31 @@ import Keys from '@app/shared/helpers/storage-keys';
 export class SessionService {
   constructor() {}
 
-  public getAccessToken(): string {
-    return localStorage.getItem(Keys.ACCESS_TOKEN) ?? '';
+  public setAccessToken(token: string): void {
+    sessionStorage.setItem(Keys.ACCESS_TOKEN, token);
   }
 
-  public isExpired(expDate: Date): boolean {
-    return expDate > new Date();
+  public getAccessToken(): string {
+    return sessionStorage.getItem(Keys.ACCESS_TOKEN) ?? '';
+  }
+
+  public setExpirationDate(expDate: string) {
+    sessionStorage.setItem(Keys.EXP_DATE, expDate);
+  }
+
+  public getExpirationDate(): string {
+    return sessionStorage.getItem(Keys.EXP_DATE) ?? '';
   }
 
   public setUserData(username: string): void {
-    localStorage.setItem(Keys.USER_DATA, username);
+    sessionStorage.setItem(Keys.USER_DATA, username);
   }
 
   public getUserData(): string {
-    return localStorage.getItem(Keys.USER_DATA) ?? '';
+    return sessionStorage.getItem(Keys.USER_DATA) ?? '';
   }
 
   public removeSessionData(): void {
-    localStorage.clear();
+    sessionStorage.clear();
   }
 }

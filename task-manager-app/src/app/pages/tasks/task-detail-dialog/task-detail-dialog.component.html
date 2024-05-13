@@ -1,0 +1,50 @@
+<div class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+  <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+    <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+    <div
+      class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+      <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+        <h3 class="text-lg leading-6 font-bold text-gray-900" id="modal-title">
+          {{this.data.task ? 'edit task' : 'add task'}}
+        </h3>
+        <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="mt-4">
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="title">title</label>
+            <input formControlName="title" type="text"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="title" placeholder="Enter title">
+          </div>
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="status">status</label>
+            <select formControlName="status"
+              class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="status">
+              <option value="open">open</option>
+              <option value="in progress">in progress</option>
+              <option value="done">done</option>
+            </select>
+          </div>
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="description">description</label>
+            <textarea formControlName="description"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="description" placeholder="enter description"></textarea>
+          </div>
+          <div class="flex items-center justify-end gap-x-4">
+            <button [disabled]="taskForm.invalid" [ngClass]="{'bg-gray-300 hover:bg-gray-300': taskForm.invalid}"
+              class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              type="submit">
+              save
+            </button>
+            <button (click)="onCloseDialog()"
+              class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              type="button">
+              close
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

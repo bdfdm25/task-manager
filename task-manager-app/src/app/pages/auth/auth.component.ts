@@ -5,7 +5,6 @@ import { toggleForm } from './store/auth.actions';
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
-  styleUrl: './auth.component.scss',
 })
 export class AuthComponent {
   showSignUp$ = this.store.select((state: any) => state.auth.showSignUp);

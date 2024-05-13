@@ -4,8 +4,8 @@ const BASE_URL = environment.apiUrl;
 
 export class Routes {
   // Auth
-  static REGISTER = `${BASE_URL}/auth/signup`;
-  static LOGIN = `${BASE_URL}/auth/signin`;
+  static SIGNUP = `${BASE_URL}/auth/signup`;
+  static SIGNIN = `${BASE_URL}/auth/signin`;
 
   // Tasks
   static TASKS = `${BASE_URL}/tasks`;

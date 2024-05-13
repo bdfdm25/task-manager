@@ -1,27 +1,26 @@
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LoginRoutingModule } from './auth-routing.module';
-import { HttpClientModule } from '@angular/common/http';
+import { AuthRoutingModule } from './auth-routing.module';
 import { AuthComponent } from './auth.component';
-import { AuthService } from '../../core/services/auth.service';
 
-import { StoreModule } from '@ngrx/store';
-import { reducer } from './store/auth.reducer';
 import { CoreModule } from '@app/core/core.module';
+import { StoreModule } from '@ngrx/store';
 import { SigninComponent } from './signin/signin.component';
 import { SignupComponent } from './signup/signup.component';
+import { reducer } from './store/auth.reducer';
 
 @NgModule({
   declarations: [AuthComponent, SigninComponent, SignupComponent],
   imports: [
     CommonModule,
     CoreModule,
-    LoginRoutingModule,
+    AuthRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    StoreModule.forRoot({ auth: reducer }),
+    StoreModule.forFeature('auth', reducer),
   ],
 })
 export class AuthModule {}
