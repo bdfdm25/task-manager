@@ -1,6 +1,6 @@
 # Task Manager
 
-> To run this project you must have at least Docker installed and running in your machine. It is recomended to use Docker Desktop.
+> To run this project you must at least have Docker installed and running in your machine. It is recomended to use Docker Desktop.
 
 ## Description
 

@@ -1,18 +1,20 @@
 version: '3.8'
 services:
-  postgres:
-    image: postgres:13.5
-    restart: always
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=task-management
-    volumes:
-      - postgres:/var/lib/postgresql/data
-    ports:
-      - '5432:5432'
   app:
-    build: ./task-manager-api
+    container_name: task-manager-app
+    build: 
+      context: ./task-manager-app
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+      - api
+    ports:
+      - "8080:80"
+  api:
+    container_name: task-manager-api
+    build: 
+      context: ./task-manager-api
+      dockerfile: Dockerfile
     ports:
       - '3333:3333'
     depends_on:
@@ -24,5 +26,19 @@ services:
       - DB_PASSWORD=postgres
       - DB_DATABASE=task-management
       - JWT_SECRET=jobsitycodechallenge2024
+  postgres:
+    container_name: task-manager-db
+    image: postgres:13.5
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=task-management
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+ 
+ 
 volumes:
   postgres:

@@ -4,6 +4,16 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## Technologies Used
+
+> NestJS: A progressive Node.js framework for building efficient, reliable, and scalable server-side applications.
+
+> TypeORM: An ORM that can run in NodeJS, Browser, Cordova, PhoneGap, Ionic, React Native, NativeScript, Expo, and Electron platforms.
+
+> Fastify: A fast and low overhead web framework for Node.js.
+
+> Jest: A delightful JavaScript testing framework with a focus on simplicity.
+
 ## Installation
 
 ```bash
