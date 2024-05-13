@@ -52,6 +52,8 @@ export class TasksService {
       );
     }
 
+    await new Promise((resolve) => setTimeout(resolve, 3000)); // 3 seconds delay
+
     return await query.getMany();
   }
 
