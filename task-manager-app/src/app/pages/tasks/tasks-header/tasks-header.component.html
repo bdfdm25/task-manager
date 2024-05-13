@@ -1,0 +1,17 @@
+<div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 gap-y-4 ">
+  <div class="flex flex-col">
+    <h1 class="text-lg sm:text-xl lg:text-2xl">tasks owner: <span class="font-bold">{{ username }}</span></h1>
+    <hr class="my-2 border-gray-300">
+    <div class="flex flex-row justify-between">
+      <button type="button" (click)="onLogout()" class="text-sm text-blue-400">logout</button>
+    </div>
+  </div>
+  <div class="flex items-center">
+    <input class="border-2 w-full border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+      type="search" name="search" placeholder="search" (keyup.enter)="onSearchTask($event)">
+    <button class="ml-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded w-fit text-sm"
+      (click)="addTask()">
+      add
+    </button>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+<div class="bg-white shadow rounded-lg border-2 border-gray-200">
+  <div class="p-4">
+    <div class="flex items-center justify-between">
+      <h3 class="text-lg leading-6 font-medium text-gray-900">
+        {{ task.title }}
+      </h3>
+      <span
+        class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"
+        *ngIf="task.status === 'open'">
+        {{ task.status }}
+      </span>
+      <span
+        class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800"
+        *ngIf="task.status === 'in progress'">
+        {{ task.status }}
+      </span>
+      <span
+        class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+        *ngIf="task.status === 'done'">
+        {{ task.status }}
+      </span>
+    </div>
+    <p class="mt-2 text-sm text-gray-500">
+      {{ task.description }}
+    </p>
+    <hr class="my-4 border-gray-300">
+    <div class="flex flex-row justify-end gap-x-4">
+      <button class="bg-red-500 hover:bg-red-700 text-white text-sm font-bold py-2 px-4 rounded"
+        (click)="deleteTask(task)">
+        delete
+      </button>
+      <button class="bg-green-500 hover:bg-green-600 text-white text-sm font-bold py-2 px-4 rounded"
+        (click)="updateTask(task)">
+        update
+      </button>
+    </div>
+  </div>
+</div>
