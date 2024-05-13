@@ -11,10 +11,12 @@
         <span class="block sm:inline ml-4">{{ error }}</span>
       </div>
 
-      <div *ngIf="(tasks$ | async) as tasks; else noTasks"
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 overflow-auto h-[32rem] lg:h-fit">
-        <app-task-card *ngFor="let task of tasks" [task]="task"></app-task-card>
-      </div>
+      <ng-container *ngIf="(tasks$ | async) as tasks; else noTasks">
+        <div *ngIf="tasks.length > 0; else noTasks"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 overflow-auto h-[32rem] lg:h-fit">
+          <app-task-card *ngFor="let task of tasks" [task]="task"></app-task-card>
+        </div>
+      </ng-container>
 
     </ng-template>
 
