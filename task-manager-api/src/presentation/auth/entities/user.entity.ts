@@ -1,8 +1,9 @@
-import { Task } from '@tasks/entities/task.entity';
+import { UserEntity } from '@core/domain/entities/auth/user.entity';
+import { Task } from '@presentation/tasks/entities/task.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('users')
-export class User {
+export class User extends UserEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

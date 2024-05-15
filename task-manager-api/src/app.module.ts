@@ -1,9 +1,11 @@
+import { UserSchema } from '@infra/db/typeorm/auth/auth.schema';
+import { TaskSchema } from '@infra/db/typeorm/tasks/task.schema';
 import { Module } from '@nestjs/common';
-import { AuthModule } from './auth/auth.module';
-import { TasksModule } from './tasks/tasks.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { configValidationSchema } from 'config.schema';
+import { AuthModule } from './presentation/auth/auth.module';
+import { TasksModule } from './presentation/tasks/tasks.module';
 
 @Module({
   imports: [
@@ -27,6 +29,7 @@ import { configValidationSchema } from 'config.schema';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
+        entities: [UserSchema, TaskSchema],
       }),
     }),
   ],
