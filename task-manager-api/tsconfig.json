@@ -17,14 +17,52 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-     "paths": {
-      "@exceptions/*": ["src/shared/exceptions/*"],
-      "@interceptors/*": ["src/shared/interceptors/*"],
-      "@decorators/*": ["src/shared/decorators/*"],
-      "@utils/*": ["src/shared/utils/*"],
-      "@auth/*": ["src/auth/*"],
-      "@tasks/*": ["src/tasks/*"],
-      "@test/*": ["./test/*"]
+    "paths": {
+      "@exceptions/*": [
+        "src/shared/exceptions/*"
+      ],
+      "@interceptors/*": [
+        "src/shared/interceptors/*"
+      ],
+      "@decorators/*": [
+        "src/shared/decorators/*"
+      ],
+      "@utils/*": [
+        "src/shared/utils/*"
+      ],
+      "@auth/*": [
+        "src/presentation/auth/*"
+      ],
+      "@tasks/*": [
+        "src/presentation/tasks/*"
+      ],
+      "@test/*": [
+        "./test/*"
+      ],
+      "@base/*": [
+        "./src/core/base/*"
+      ],
+      "@services/*": [
+        "src/core/services/*"
+      ],
+      "@usecases/*": [
+        "./src/core/use-cases/*"
+      ],
+      "@presentation/*": [
+        "src/presentation/*"
+      ],
+      "@infra/*": [
+        "./src/infra/*"
+      ],
+      "@dtos/*": [
+        "src/core/domain/dtos/*"
+      ],
+      "@core/*": [
+        "src/core/*"
+      ],
+      "@shared/*": [
+        "src/shared/*"
+      ],
     }
   }
 }

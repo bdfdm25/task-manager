@@ -118,7 +118,15 @@
       "^@utils/(.*)": "<rootDir>/../src/shared/utils/$1",
       "^@decorators/(.*)": "<rootDir>/../src/shared/decorators/$1",
       "^@interceptors/(.*)": "<rootDir>/../src/shared/interceptors/$1",
-      "^@exceptions/(.*)": "<rootDir>/../src/shared/exceptions/$1"
+      "^@exceptions/(.*)": "<rootDir>/../src/shared/exceptions/$1",
+      "^@base/(.*)": "<rootDir>/../src/core/base/$1",
+      "^@services/(.*)": "<rootDir>/../src/core/services/$1",
+      "^@usecases/(.*)": "<rootDir>/../src/core/use-cases/$1",
+      "^@presentation/(.*)": "<rootDir>/../src/presentation/$1",
+      "^@infra/(.*)": "<rootDir>/../src/infra/$1",
+      "^@dtos/(.*)": "<rootDir>/../src/core/domain/dtos/$1",
+      "^@core/(.*)": "<rootDir>/../src/core/$1",
+      "^@shared/(.*)": "<rootDir>/../src/shared/$1"
     }
   }
 }

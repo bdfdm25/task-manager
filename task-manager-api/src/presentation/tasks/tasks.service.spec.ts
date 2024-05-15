@@ -6,7 +6,7 @@ import { TasksFilterDto } from './dto/tasks-filter.dto';
 import { NotFoundException } from '@nestjs/common';
 import { Equal, Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { TaskStatus } from './task-status.enum';
+import { TaskStatus } from '../../shared/enums/task-status.enum';
 import { User } from '@auth/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 
@@ -255,10 +255,6 @@ describe('TasksService', () => {
         email: 'john@example.com',
         password: await bcrypt.hash('password', await bcrypt.genSalt()),
       };
-
-      const deleteSpy = jest
-        .spyOn(taskRepository, 'delete')
-        .mockResolvedValue({ affected: 0, raw: null }); // Add the 'raw' property to the mockResolvedValue object
 
       await expect(service.remove(id, user)).rejects.toThrow(NotFoundException);
     });

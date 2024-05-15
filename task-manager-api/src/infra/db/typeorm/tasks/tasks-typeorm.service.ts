@@ -1,28 +1,27 @@
+import { UserEntity } from '@core/domain/entities/auth/user.entity';
+import { TaskEntity } from '@core/domain/entities/tasks/task.entity';
+import { TasksFilterDto } from '@dtos/tasks/tasks-filter.dto';
+import { CustomException } from '@exceptions/custom.exception';
 import {
-  Injectable,
   InternalServerErrorException,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { TasksBaseService } from '@services/tasks/tasks.service';
+import { TaskStatus } from '@shared/enums/task-status.enum';
+import { TaskDto } from '@tasks/dto/task.dto';
+
 import { Equal, Repository } from 'typeorm';
-import { TaskDto } from './dto/task.dto';
-import { Task } from './entities/task.entity';
-import { CustomException } from '@exceptions/custom.exception';
-import { TaskStatus } from './task-status.enum';
-import { TasksFilterDto } from './dto/tasks-filter.dto';
-import { User } from '@auth/entities/user.entity';
 
-@Injectable()
-export class TasksService {
-  private logger = new Logger('TaskService', { timestamp: true });
-
+export class TasksTypeOrmService implements TasksBaseService {
+  private logger = new Logger('TasksTypeOrmService', { timestamp: true });
   constructor(
-    @InjectRepository(Task)
-    private readonly taskRepository: Repository<Task>,
+    @InjectRepository(TaskEntity)
+    private readonly taskRepository: Repository<TaskEntity>,
   ) {}
 
-  async create(createTaskDto: TaskDto, user: User): Promise<Task> {
+  async create(createTaskDto: TaskDto, user: UserEntity): Promise<TaskEntity> {
     const task = this.taskRepository.create({ ...createTaskDto, user });
 
     try {
@@ -35,7 +34,10 @@ export class TasksService {
     return task;
   }
 
-  async findAll(tasksFilterDto: TasksFilterDto, user: User): Promise<Task[]> {
+  async findAll(
+    tasksFilterDto: TasksFilterDto,
+    user: UserEntity,
+  ): Promise<TaskEntity[]> {
     const { status, search } = tasksFilterDto;
     const query = this.taskRepository.createQueryBuilder('task');
 
@@ -57,7 +59,7 @@ export class TasksService {
     return await query.getMany();
   }
 
-  async findOne(id: string, user: User): Promise<Task> {
+  async findOne(id: string, user: UserEntity): Promise<TaskEntity> {
     try {
       const task = await this.taskRepository.findOneBy({
         id: Equal(id),
@@ -78,14 +80,18 @@ export class TasksService {
     }
   }
 
-  async update(id: string, status: TaskStatus, user: User): Promise<Task> {
+  async update(
+    id: string,
+    status: TaskStatus,
+    user: UserEntity,
+  ): Promise<TaskEntity> {
     const task = await this.findOne(id, user);
     task.status = status;
     this.taskRepository.save(task);
     return task;
   }
 
-  async remove(id: string, user: User): Promise<void> {
+  async remove(id: string, user: UserEntity): Promise<void> {
     try {
       const result = await this.taskRepository.delete({ id, user });
 
