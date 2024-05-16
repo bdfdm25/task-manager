@@ -23,6 +23,12 @@ Access the root folder of this project: `~/task-manager` and run: `docker compos
 
 > This will install all dependencies and build both the API and the APP, create a Postgres database and start the API at the address: `http://localhost:3333/api/` and the APP at the address: `http://localhost:8080/`.
 
-If everythin went sucessfully, you should see something similar to this:
+If everything went sucessfully, you should see something similar to this:
 
 ![docker-compose-build screenshot](./docs/img/docker-compose-build.png)
+
+Now, you can just access `http://localhost:8080/` and it will redirect you to the application sign in page.
+
+> It is recomended that you try accessing from a Incongnito Windows on Chrome: Ctrl + Shift + N
+
+To check the API documentation via Swagger, just go to `http://localhost:3333/docs`.
