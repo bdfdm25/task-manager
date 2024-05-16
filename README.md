@@ -17,12 +17,12 @@ Instructions on how to run each aplication are described in it's respective READ
 
 ## Running locally
 
-You can execute locally the database and the API using docker.
+You can execute the environment locally by just building the docker compose file.
 
-Access the root folder of this project: `~/task-manager` and run
+Access the root folder of this project: `~/task-manager` and run: `docker compose up --build -d`
 
-> docker compose up --build -d
+> This will install all dependencies and build both the API and the APP, create a Postgres database and start the API at the address: `http://localhost:3333/api/` and the APP at the address: `http://localhost:8080/`.
 
-to install the dependencies and start the API with the database.
+If everythin went sucessfully, you should see something similar to this:
 
-If everythin went sucessfully, you can then access the APP folder at `~/task-manager/task-manager-app/` and follow the project README.md instructions to install the dependencies and start the aplication.
+![docker-compose-build screenshot](./docs/img/docker-compose-build.png)

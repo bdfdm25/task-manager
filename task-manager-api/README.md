@@ -1,8 +1,8 @@
+# Task Manager API
+
 ## Description
 
-> The instructions shown below are to execute only the API locally. To have the full experience with the app, you must execute the frontend APP locally as well.
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+> The instructions shown below are to execute only the API locally. To have the full experience with the app, go back to the repository root and check its documentation on how to run all locally.
 
 ## Technologies Used
 

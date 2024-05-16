@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from './core/guards/auth.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -14,6 +13,7 @@ const routes: Routes = [
     loadChildren: () =>
       import('./pages/tasks/tasks.module').then((m) => m.TasksModule),
   },
+  { path: '**', redirectTo: 'tasks' },
 ];
 
 @NgModule({

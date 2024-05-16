@@ -1,6 +1,6 @@
-# TaskManagerApp
+# Task Manager App
 
-> The instructions shown below are to execute only the frontend app locally. To have the full experience with the app, you must execute the API locally as well.
+> The instructions shown below are to execute only the frontend app locally. To have the full experience with the app, go back to the repository root and check its documentation on how to run all locally.
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.7.
 
