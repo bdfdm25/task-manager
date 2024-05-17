@@ -1,262 +1,144 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { TasksService } from './tasks.service';
+// tasks.service.spec.ts
+import { UserEntity } from '@core/domain/entities/auth/user.entity';
+import { TaskEntity } from '@core/domain/entities/tasks/task.entity';
+import { TaskStatus } from '@shared/enums/task-status.enum';
 import { TaskDto } from './dto/task.dto';
-import { Task } from './entities/task.entity';
-import { TasksFilterDto } from './dto/tasks-filter.dto';
-import { NotFoundException } from '@nestjs/common';
-import { Equal, Repository } from 'typeorm';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { TaskStatus } from '../../shared/enums/task-status.enum';
-import { User } from '@auth/entities/user.entity';
-import * as bcrypt from 'bcrypt';
+import { TasksService } from './tasks.service';
+import { TasksFilterDto } from '@dtos/tasks/tasks-filter.dto';
+
+const MOCK_USER: UserEntity = {
+  fullname: 'John Doe',
+  email: 'john.doe@example.com',
+  password: 'JohnDoe1234',
+};
+
+const MOCK_TASK: TaskEntity = {
+  id: '001',
+  title: 'Test Task',
+  description: 'Test Description',
+  status: TaskStatus.OPEN,
+  user: MOCK_USER,
+};
+
+const MOCK_TASK_LIST: TaskEntity[] = [
+  {
+    id: '001',
+    title: 'Test Task 1',
+    description: 'Test Description 1',
+    status: TaskStatus.OPEN,
+    user: MOCK_USER,
+  },
+  {
+    id: '002',
+    title: 'Test Task 2',
+    description: 'Test Description 2',
+    status: TaskStatus.IN_PROGRESS,
+    user: MOCK_USER,
+  },
+];
 
 describe('TasksService', () => {
-  let service: TasksService;
-  let taskRepository: Repository<Task>;
+  let tasksService: TasksService;
+  let mockCreateTaskUseCase;
+  let mockDeleteTaskUseCase;
+  let mockGetTaskListUseCase;
+  let mockGetTaskUseCase;
+  let mockUpdateTaskUseCase;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        TasksService,
-        {
-          provide: getRepositoryToken(Task),
-          useValue: {
-            save: jest.fn(),
-            findOne: jest.fn(),
-            createQueryBuilder: jest.fn(),
-            delete: jest.fn(),
-            create: jest.fn(),
-            findOneBy: jest.fn(),
-          },
-        },
-      ],
-    }).compile();
+  beforeEach(() => {
+    mockCreateTaskUseCase = { execute: jest.fn() };
+    mockDeleteTaskUseCase = { execute: jest.fn() };
+    mockGetTaskListUseCase = { execute: jest.fn() };
+    mockGetTaskUseCase = { execute: jest.fn() };
+    mockUpdateTaskUseCase = { execute: jest.fn() };
 
-    service = module.get<TasksService>(TasksService);
-    taskRepository = module.get<Repository<Task>>(getRepositoryToken(Task));
+    tasksService = new TasksService(
+      mockCreateTaskUseCase,
+      mockDeleteTaskUseCase,
+      mockGetTaskListUseCase,
+      mockGetTaskUseCase,
+      mockUpdateTaskUseCase,
+    );
   });
 
-  describe('create', () => {
-    it('should create a new task', async () => {
-      const task: Task = {
-        id: 'task-id',
-        title: 'Task 1',
-        description: 'Description 1',
-        status: TaskStatus.OPEN,
-      };
+  it('should create a task', async () => {
+    const taskDto: TaskDto = {
+      title: 'Test Task',
+      description: 'Test Description',
+      status: TaskStatus.OPEN,
+    };
 
-      const createTaskDto: TaskDto = {
-        title: 'Task 1',
-        description: 'Description 1',
-        status: TaskStatus.OPEN,
-      };
+    jest.spyOn(mockCreateTaskUseCase, 'execute').mockResolvedValue(MOCK_TASK);
 
-      const user: User = {
-        id: '6193e7a4-29d8-4876-b31a-2d598e2d1545',
-        fullname: 'John Doe',
-        email: 'john@example.com',
-        password: await bcrypt.hash('password', await bcrypt.genSalt()),
-      };
+    const result = await tasksService.create(taskDto, MOCK_USER);
 
-      const createSpy = jest
-        .spyOn(taskRepository, 'create')
-        .mockReturnValue(task);
-
-      const saveSpy = jest
-        .spyOn(taskRepository, 'save')
-        .mockResolvedValueOnce(undefined);
-
-      const result = await service.create(createTaskDto, user);
-
-      expect(createSpy).toHaveBeenCalledWith({
-        ...createTaskDto,
-        user,
-      });
-      expect(saveSpy).toHaveBeenCalledWith(task);
-      expect(result).toEqual(createTaskDto);
-    });
-
-    it('should throw an error if task creation fails', async () => {
-      const task: Task = {
-        id: 'task-id',
-        title: 'Task 1',
-        description: 'Description 1',
-        status: TaskStatus.OPEN,
-      };
-
-      const createTaskDto: TaskDto = {
-        title: 'Task 1',
-        description: 'Description 1',
-        status: TaskStatus.OPEN,
-      };
-
-      const user: User = {
-        id: '6193e7a4-29d8-4876-b31a-2d598e2d1545',
-        fullname: 'John Doe',
-        email: 'john@example.com',
-        password: await bcrypt.hash('password', await bcrypt.genSalt()),
-      };
-
-      jest.spyOn(taskRepository, 'create').mockReturnValue(task);
-
-      jest.spyOn(taskRepository, 'save').mockRejectedValueOnce(new Error());
-
-      await expect(service.create(createTaskDto, user)).rejects.toThrow();
-    });
+    expect(result).toEqual(MOCK_TASK);
+    expect(mockCreateTaskUseCase.execute).toHaveBeenCalledWith(
+      taskDto,
+      MOCK_USER,
+    );
   });
 
-  describe('findAll', () => {
-    it('should return an array of tasks', async () => {
-      const tasksFilterDto: TasksFilterDto = {
-        status: TaskStatus.IN_PROGRESS,
-        search: 'Task',
-      };
+  it('should find all tasks', async () => {
+    const tasksFilterDto: TasksFilterDto = {
+      status: TaskStatus.OPEN,
+      search: 'Test',
+    };
 
-      const user: User = {
-        id: '6193e7a4-29d8-4876-b31a-2d598e2d1545',
-        fullname: 'John Doe',
-        email: 'john@example.com',
-        password: await bcrypt.hash('password', await bcrypt.genSalt()),
-      };
+    jest
+      .spyOn(mockGetTaskListUseCase, 'execute')
+      .mockResolvedValue(MOCK_TASK_LIST);
 
-      const tasks: Task[] = [
-        {
-          id: 'task-id',
-          title: 'Task 1',
-          description: 'Description 1',
-          status: TaskStatus.IN_PROGRESS,
-          user,
-        },
-      ];
+    const result = await tasksService.findAll(tasksFilterDto, MOCK_USER);
 
-      const result = await service.findAll(tasksFilterDto, user);
-
-      expect(taskRepository.createQueryBuilder).toHaveBeenCalled();
-      expect(result).toEqual(tasks);
-    });
+    expect(result).toEqual(MOCK_TASK_LIST);
+    expect(mockGetTaskListUseCase.execute).toHaveBeenCalledWith(
+      tasksFilterDto,
+      MOCK_USER,
+    );
   });
 
-  describe('findOne', () => {
-    it('should return a task by id', async () => {
-      const id = 'task-id';
-      const task: Task = {
-        id: 'task-id',
-        title: 'Task 1',
-        description: 'Description 1',
-        status: TaskStatus.OPEN,
-      };
+  it('should find one task', async () => {
+    const id = '001';
 
-      const user: User = {
-        id: '6193e7a4-29d8-4876-b31a-2d598e2d1545',
-        fullname: 'John Doe',
-        email: 'john@example.com',
-        password: await bcrypt.hash('password', await bcrypt.genSalt()),
-      };
+    mockGetTaskUseCase.execute.mockResolvedValue(MOCK_TASK);
+    const result = await tasksService.findOne(id, MOCK_USER);
 
-      jest.spyOn(taskRepository, 'findOneBy').mockResolvedValue(task);
-
-      const result = await service.findOne(id, user);
-
-      expect(taskRepository.findOneBy).toHaveBeenCalledWith({
-        id: Equal(id),
-        user: Equal(user.id),
-      });
-      expect(result).toEqual(task);
-    });
-
-    it('should throw a NotFoundException if task is not found', async () => {
-      const id = 'task-id';
-      const user: User = {
-        id: '6193e7a4-29d8-4876-b31a-2d598e2d1545',
-        fullname: 'John Doe',
-        email: 'john@example.com',
-        password: await bcrypt.hash('password', await bcrypt.genSalt()),
-      };
-
-      jest.spyOn(taskRepository, 'findOneBy').mockResolvedValue(null);
-
-      await expect(service.findOne(id, user)).rejects.toThrow(
-        NotFoundException,
-      );
-    });
+    expect(result).toEqual(MOCK_TASK);
+    expect(mockGetTaskUseCase.execute).toHaveBeenCalledWith(id, MOCK_USER);
   });
 
-  describe('update', () => {
-    it('should update a task status', async () => {
-      const id = 'task-id';
-      const status = TaskStatus.DONE;
-      const user: User = {
-        id: 'user-id',
-        fullname: 'John Doe',
-        email: 'john@example.com',
-        password: await bcrypt.hash('password', await bcrypt.genSalt()),
-      };
-      const task: Task = {
-        id,
-        title: 'Task 1',
-        description: 'Description 1',
-        status: TaskStatus.IN_PROGRESS,
-        user,
-      };
+  it('should update a task', async () => {
+    const id = '001';
+    const status = TaskStatus.DONE;
 
-      jest.spyOn(service, 'findOne').mockResolvedValue(task);
-      jest.spyOn(taskRepository, 'save').mockResolvedValue(undefined);
+    const UPDATED_TASK: TaskEntity = {
+      id: '001',
+      title: 'Test Task',
+      description: 'Test Description',
+      status: TaskStatus.DONE,
+      user: MOCK_USER,
+    };
 
-      const result = await service.update(id, status, user);
+    jest
+      .spyOn(mockUpdateTaskUseCase, 'execute')
+      .mockResolvedValue(UPDATED_TASK);
+    mockUpdateTaskUseCase.execute.mockResolvedValue(UPDATED_TASK);
+    const result = await tasksService.update(id, status, MOCK_USER);
 
-      expect(service.findOne).toHaveBeenCalledWith(id, user);
-      expect(taskRepository.save).toHaveBeenCalledWith(task);
-      expect(task.status).toEqual(status);
-      expect(result).toEqual(task);
-    });
-
-    it('should throw a NotFoundException if task is not found', async () => {
-      const id = 'task-id';
-      const status = TaskStatus.DONE;
-      const user: User = {
-        id: 'user-id',
-        fullname: 'John Doe',
-        email: 'john@example.com',
-        password: await bcrypt.hash('password', await bcrypt.genSalt()),
-      };
-
-      jest.spyOn(service, 'findOne').mockResolvedValue(null);
-
-      await expect(service.update(id, status, user)).rejects.toThrow(
-        NotFoundException,
-      );
-    });
+    expect(result).toEqual(UPDATED_TASK);
+    expect(mockUpdateTaskUseCase.execute).toHaveBeenCalledWith(
+      id,
+      status,
+      MOCK_USER,
+    );
   });
 
-  describe('remove', () => {
-    it('should remove a task', async () => {
-      const id = 'task-id';
-      const user: User = {
-        id: 'user-id',
-        fullname: 'John Doe',
-        email: 'john@example.com',
-        password: await bcrypt.hash('password', await bcrypt.genSalt()),
-      };
+  it('should remove a task', async () => {
+    const id = '001';
 
-      const deleteSpy = jest
-        .spyOn(taskRepository, 'delete')
-        .mockResolvedValue({ affected: 1, raw: null }); // Add the 'raw' property to the mockResolvedValue object
-
-      await service.remove(id, user);
-
-      expect(deleteSpy).toHaveBeenCalledWith({ id, user });
-    });
-
-    it('should throw a NotFoundException if task is not found', async () => {
-      const id = 'task-id';
-      const user: User = {
-        id: 'user-id',
-        fullname: 'John Doe',
-        email: 'john@example.com',
-        password: await bcrypt.hash('password', await bcrypt.genSalt()),
-      };
-
-      await expect(service.remove(id, user)).rejects.toThrow(NotFoundException);
-    });
+    jest.spyOn(mockDeleteTaskUseCase, 'execute');
+    await tasksService.remove(id, MOCK_USER);
+    expect(mockDeleteTaskUseCase.execute).toHaveBeenCalledWith(id, MOCK_USER);
   });
 });

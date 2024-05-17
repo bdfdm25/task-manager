@@ -21,6 +21,7 @@ export const TaskSchema = new EntitySchema<TaskEntity>({
     status: {
       type: 'enum',
       enum: TaskStatus,
+      nullable: true,
     },
   },
   relations: {

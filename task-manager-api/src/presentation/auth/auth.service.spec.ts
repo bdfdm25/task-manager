@@ -1,132 +1,93 @@
-import { Test, TestingModule } from '@nestjs/testing';
+// auth.service.spec.ts
+import { UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { JwtService } from '@nestjs/jwt';
-import { Repository } from 'typeorm';
-import { User } from './entities/user.entity';
-import {
-  ConflictException,
-  InternalServerErrorException,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { SignupDto } from './dto/signup.dto';
 import { SigninDto } from './dto/signin.dto';
+import { SignupDto } from './dto/signup.dto';
 import * as bcrypt from 'bcrypt';
 
 describe('AuthService', () => {
-  let service: AuthService;
-  let userRepository: Repository<User>;
-  let jwtService: JwtService;
+  let authService: AuthService;
+  let mockJwtService;
+  let mockSigninUseCase;
+  let mockSignupUseCase;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        AuthService,
-        {
-          provide: getRepositoryToken(User),
-          useValue: {
-            save: jest.fn(),
-            findOne: jest.fn(),
-            create: jest.fn(),
-          },
-        },
-        {
-          provide: JwtService,
-          useValue: {
-            sign: jest.fn(),
-          },
-        },
-      ],
-    }).compile();
+  beforeEach(() => {
+    mockJwtService = { sign: jest.fn() };
+    mockSigninUseCase = { execute: jest.fn() };
+    mockSignupUseCase = { execute: jest.fn() };
 
-    service = module.get<AuthService>(AuthService);
-    userRepository = module.get<Repository<User>>(getRepositoryToken(User));
-    jwtService = module.get<JwtService>(JwtService);
+    authService = new AuthService(
+      mockJwtService,
+      mockSigninUseCase,
+      mockSignupUseCase,
+    );
   });
 
-  describe('signup', () => {
-    it('should create a new user', async () => {
-      const signupDto: SignupDto = {
-        fullname: 'John Doe',
-        email: 'john@example.com',
-        password: 'password',
-      };
+  it('should sign up a user', async () => {
+    const signupDto: SignupDto = {
+      fullname: 'Test User',
+      email: 'test@test.com',
+      password: 'password',
+    };
 
-      await service.signup(signupDto);
+    await authService.signup(signupDto);
 
-      expect(userRepository.create).toHaveBeenCalledWith(
-        expect.objectContaining({
-          fullname: signupDto.fullname,
-          email: signupDto.email,
-          password: expect.any(String),
-        }),
-      );
-    });
-
-    it('should throw ConflictException if email is already in use', async () => {
-      const signupDto: SignupDto = {
-        fullname: 'John Doe',
-        email: 'john@example.com',
-        password: 'password',
-      };
-
-      jest
-        .spyOn(userRepository, 'save')
-        .mockRejectedValueOnce({ code: '23505' });
-
-      await expect(service.signup(signupDto)).rejects.toThrow(
-        ConflictException,
-      );
-    });
-
-    it('should throw InternalServerErrorException if an error occurs during user creation', async () => {
-      const signupDto: SignupDto = {
-        fullname: 'John Doe',
-        email: 'john@example.com',
-        password: 'password',
-      };
-
-      jest.spyOn(userRepository, 'save').mockRejectedValueOnce(new Error());
-
-      await expect(service.signup(signupDto)).rejects.toThrow(
-        InternalServerErrorException,
-      );
-    });
+    expect(mockSignupUseCase.execute).toHaveBeenCalledWith(signupDto);
   });
 
-  describe('signin', () => {
-    it('should return an access token if credentials are valid', async () => {
-      const signinDto: SigninDto = {
-        email: 'john@example.com',
-        password: 'password',
-      };
+  it('should sign in a user and return an access token', async () => {
+    const signinDto: SigninDto = {
+      email: 'test@test.com',
+      password: 'password',
+    };
+    const user = {
+      id: '1',
+      fullname: 'Test User',
+      email: 'test@test.com',
+      password: 'hashedpassword',
+    };
+    const payload = { id: user.id, fullname: user.fullname, email: user.email };
+    const accessToken = 'access_token';
 
-      const user: User = {
-        id: '6193e7a4-29d8-4876-b31a-2d598e2d1545',
-        fullname: 'John Doe',
-        email: 'john@example.com',
-        password: await bcrypt.hash('password', await bcrypt.genSalt()),
-      };
+    jest.spyOn(mockSigninUseCase, 'execute').mockResolvedValue(user);
+    jest.spyOn(mockJwtService, 'sign').mockReturnValue(accessToken);
+    const bcryptCompare = jest.fn().mockResolvedValue(true);
+    (bcrypt.compare as jest.Mock) = bcryptCompare;
 
-      jest.spyOn(userRepository, 'findOne').mockResolvedValueOnce(user);
-      jest.spyOn(jwtService, 'sign').mockReturnValueOnce('access_token');
+    const result = await authService.signin(signinDto);
 
-      const result = await service.signin(signinDto);
+    expect(result).toEqual({ accessToken });
+    expect(mockSigninUseCase.execute).toHaveBeenCalledWith(signinDto);
+    expect(bcrypt.compare).toHaveBeenCalledWith(
+      signinDto.password,
+      user.password,
+    );
+    expect(mockJwtService.sign).toHaveBeenCalledWith(payload);
+  });
 
-      expect(result).toEqual({ accessToken: 'access_token' });
-    });
+  it('should throw UnauthorizedException if invalid credentials are provided', async () => {
+    const signinDto: SigninDto = {
+      email: 'test@test.com',
+      password: 'password',
+    };
+    const user = {
+      id: '1',
+      fullname: 'Test User',
+      email: 'test@test.com',
+      password: 'hashedpassword',
+    };
 
-    it('should throw UnauthorizedException if credentials are invalid', async () => {
-      const signinDto: SigninDto = {
-        email: 'john@example.com',
-        password: 'password',
-      };
+    jest.spyOn(mockSigninUseCase, 'execute').mockResolvedValue(user);
+    const bcryptCompare = jest.fn().mockResolvedValue(false);
+    (bcrypt.compare as jest.Mock) = bcryptCompare;
 
-      jest.spyOn(userRepository, 'findOne').mockResolvedValueOnce(undefined);
-
-      await expect(service.signin(signinDto)).rejects.toThrow(
-        UnauthorizedException,
-      );
-    });
+    await expect(authService.signin(signinDto)).rejects.toThrow(
+      UnauthorizedException,
+    );
+    expect(mockSigninUseCase.execute).toHaveBeenCalledWith(signinDto);
+    expect(bcrypt.compare).toHaveBeenCalledWith(
+      signinDto.password,
+      user.password,
+    );
   });
 });

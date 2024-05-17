@@ -3,6 +3,7 @@ import { TaskEntity } from '@core/domain/entities/tasks/task.entity';
 import { TasksFilterDto } from '@dtos/tasks/tasks-filter.dto';
 import { CustomException } from '@exceptions/custom.exception';
 import {
+  Injectable,
   InternalServerErrorException,
   Logger,
   NotFoundException,
@@ -14,6 +15,7 @@ import { TaskDto } from '@tasks/dto/task.dto';
 
 import { Equal, Repository } from 'typeorm';
 
+@Injectable()
 export class TasksTypeOrmService implements TasksBaseService {
   private logger = new Logger('TasksTypeOrmService', { timestamp: true });
   constructor(
@@ -54,7 +56,7 @@ export class TasksTypeOrmService implements TasksBaseService {
       );
     }
 
-    await new Promise((resolve) => setTimeout(resolve, 3000)); // 3 seconds delay
+    await new Promise((resolve) => setTimeout(resolve, 2000)); // 3 seconds delay
 
     return await query.getMany();
   }

@@ -3,6 +3,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { SigninDto } from './dto/signin.dto';
 import { SignupDto } from './dto/signup.dto';
+import { PassportModule } from '@nestjs/passport';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -10,6 +11,7 @@ describe('AuthController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [PassportModule.register({ defaultStrategy: 'jwt' })],
       controllers: [AuthController],
       providers: [
         {
@@ -52,7 +54,6 @@ describe('AuthController', () => {
         accessToken,
       });
       expect(authService.signin).toHaveBeenCalledWith(signinDto);
-      // Add any additional assertions if needed
     });
   });
 

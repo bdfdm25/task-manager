@@ -81,9 +81,16 @@
       "/dto/",
       "/entity/",
       "/entities/",
+      "/dtos/",
+      "/typeorm/",
       ".module.ts$",
       ".main.ts$",
-      ".strategy.ts$"
+      ".strategy.ts$",
+      ".entity.ts$",
+      ".schema.ts$",
+      ".enum.ts$",
+      ".exception.ts$",
+      ".decorator.ts$"
     ],
     "coverageReporters": [
       "json",

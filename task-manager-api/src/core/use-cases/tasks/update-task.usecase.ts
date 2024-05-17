@@ -7,10 +7,10 @@ export class UpdateTaskUseCase {
   constructor(private readonly service: TasksBaseService) {}
 
   async execute(
-    url: string,
+    id: string,
     status: TaskStatus,
     user: UserEntity,
   ): Promise<TaskEntity> {
-    return this.service.update(url, status, user);
+    return this.service.update(id, status, user);
   }
 }

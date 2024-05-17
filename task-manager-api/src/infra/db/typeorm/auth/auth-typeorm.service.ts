@@ -3,6 +3,7 @@ import { SigninDto } from '@dtos/auth/signin.dto';
 import { SignupDto } from '@dtos/auth/signup.dto';
 import {
   ConflictException,
+  Injectable,
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
@@ -12,6 +13,7 @@ import { POSTGRES_ERROR } from '@utils/typeorm-errors.enum';
 import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 
+@Injectable()
 export class AuthTypeOrmService implements AuthBaseService {
   private logger = new Logger('AuthTypeOrmService', { timestamp: true });
   constructor(

@@ -10,6 +10,7 @@ import {
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import {
   ApiBody,
   ApiCreatedResponse,
@@ -17,13 +18,12 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { TaskDto } from './dto/task.dto';
-import { TasksService } from './tasks.service';
-import { Task } from './entities/task.entity';
-import { UpdateTaskDto } from './dto/update-task.dto';
 import { TasksFilterDto } from './dto/tasks-filter.dto';
-import { AuthGuard } from '@nestjs/passport';
+import { UpdateTaskDto } from './dto/update-task.dto';
+import { TasksService } from './tasks.service';
 
-import { User } from '@auth/entities/user.entity';
+import { UserEntity } from '@core/domain/entities/auth/user.entity';
+import { TaskEntity } from '@core/domain/entities/tasks/task.entity';
 import { GetUser } from '@decorators/get-user.decorator';
 
 @ApiTags('Tasks')
@@ -41,7 +41,10 @@ export class TasksController {
     description: 'Data to create a new task',
     type: TaskDto,
   })
-  create(@Body() createTaskDto: TaskDto, @GetUser() user: User): Promise<Task> {
+  create(
+    @Body() createTaskDto: TaskDto,
+    @GetUser() user: UserEntity,
+  ): Promise<TaskEntity> {
     return this.tasksService.create(createTaskDto, user);
   }
 
@@ -53,8 +56,8 @@ export class TasksController {
   })
   findAll(
     @Query(ValidationPipe) tasksFilterDto: TasksFilterDto,
-    @GetUser() user: User,
-  ): Promise<Task[]> {
+    @GetUser() user: UserEntity,
+  ): Promise<TaskEntity[]> {
     return this.tasksService.findAll(tasksFilterDto, user);
   }
 
@@ -63,7 +66,7 @@ export class TasksController {
     description: 'A specific task by id',
     type: TaskDto,
   })
-  findOne(@Param('id') id: string, @GetUser() user: User) {
+  findOne(@Param('id') id: string, @GetUser() user: UserEntity) {
     return this.tasksService.findOne(id, user);
   }
 
@@ -71,8 +74,8 @@ export class TasksController {
   update(
     @Param('id') id: string,
     @Body() taskStatus: UpdateTaskDto,
-    @GetUser() user: User,
-  ): Promise<Task> {
+    @GetUser() user: UserEntity,
+  ): Promise<TaskEntity> {
     return this.tasksService.update(id, taskStatus.status, user);
   }
 
@@ -80,7 +83,7 @@ export class TasksController {
   @ApiOkResponse({
     description: 'Task deleted',
   })
-  remove(@Param('id') id: string, @GetUser() user: User) {
+  remove(@Param('id') id: string, @GetUser() user: UserEntity) {
     return this.tasksService.remove(id, user);
   }
 }
