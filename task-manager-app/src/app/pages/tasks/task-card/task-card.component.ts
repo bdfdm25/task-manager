@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TaskStatus } from '../enum/task-status.enum';
 import { ITask } from '../interfaces/task.interface';
@@ -8,6 +8,7 @@ import { TaskDetailDialogComponent } from '../task-detail-dialog/task-detail-dia
 @Component({
   selector: 'app-task-card',
   templateUrl: './task-card.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskCardComponent {
   @Input()
