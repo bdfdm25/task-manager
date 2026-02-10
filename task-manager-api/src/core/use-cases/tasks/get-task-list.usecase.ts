@@ -12,4 +12,11 @@ export class GetTaskListUseCase {
   ): Promise<TaskEntity[]> {
     return this.service.findAll(tasksFilterDto, user);
   }
+
+  async checkTaskCodeExists(
+    taskCode: string,
+    user: UserEntity,
+  ): Promise<boolean> {
+    return this.service.checkTaskCodeExists(taskCode, user);
+  }
 }

@@ -29,4 +29,17 @@ export class TaskService {
   public deleteTask(taskId: string): Observable<void> {
     return this.http.delete<void>(`${Routes.TASKS}/${taskId}`);
   }
+
+  /**
+   * Async validator: Checks if a task code already exists in the system.
+   * Makes an HTTP request to the backend to validate uniqueness.
+   *
+   * @param taskCode - The task code to check
+   * @returns Observable<boolean> - true if task code exists, false otherwise
+   */
+  public checkTaskCodeExists(taskCode: string): Observable<boolean> {
+    return this.http.get<boolean>(
+      `${Routes.TASKS}/check-code/${taskCode.toUpperCase()}`,
+    );
+  }
 }

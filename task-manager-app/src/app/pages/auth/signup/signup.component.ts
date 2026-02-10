@@ -19,9 +19,14 @@ export class SignupComponent implements OnDestroy {
   signupForm!: FormGroup;
   errMsg: string = '';
   loading: boolean = false;
+  passwordStrength: 'weak' | 'medium' | 'strong' | null = null;
 
-  constructor(private store: Store, private authService: AuthService) {
+  constructor(
+    private store: Store,
+    private authService: AuthService,
+  ) {
     this.createForm();
+    this.initPasswordStrengthCheck();
   }
 
   ngOnDestroy() {
@@ -62,5 +67,39 @@ export class SignupComponent implements OnDestroy {
       email: new FormControl(null, [Validators.required, Validators.email]),
       password: new FormControl(null, [Validators.required]),
     });
+  }
+
+  private initPasswordStrengthCheck(): void {
+    this.signupForm
+      .get('password')
+      ?.valueChanges.pipe(takeUntil(this.ngUnsubscribe$))
+      .subscribe((password: string) => {
+        this.passwordStrength = this.calculatePasswordStrength(password);
+      });
+  }
+
+  private calculatePasswordStrength(
+    password: string,
+  ): 'weak' | 'medium' | 'strong' | null {
+    if (!password || password.length === 0) {
+      return null;
+    }
+
+    let strength = 0;
+
+    // Length check
+    if (password.length >= 8) strength++;
+    if (password.length >= 12) strength++;
+
+    // Character variety checks
+    if (/[a-z]/.test(password)) strength++; // lowercase
+    if (/[A-Z]/.test(password)) strength++; // uppercase
+    if (/[0-9]/.test(password)) strength++; // numbers
+    if (/[^a-zA-Z0-9]/.test(password)) strength++; // special characters
+
+    // Determine strength level
+    if (strength <= 2) return 'weak';
+    if (strength <= 4) return 'medium';
+    return 'strong';
   }
 }

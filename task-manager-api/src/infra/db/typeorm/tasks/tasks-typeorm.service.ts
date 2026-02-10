@@ -75,22 +75,43 @@ export class TasksTypeOrmService implements TasksBaseService {
       }
     } catch (error) {
       this.logger.error(error);
+      if (error instanceof CustomException) {
+        throw error;
+      }
       throw new CustomException(
-        error.response.message,
-        error.response.statusCode,
+        (error as any).response?.message || 'Internal server error',
+        (error as any).response?.statusCode || 500,
       );
     }
   }
 
   async update(
     id: string,
-    status: TaskStatus,
+    updateTaskDto: Partial<TaskDto>,
     user: UserEntity,
   ): Promise<TaskEntity> {
     const task = await this.findOne(id, user);
-    task.status = status;
-    this.taskRepository.save(task);
+
+    // Update only provided fields
+    Object.assign(task, updateTaskDto);
+
+    await this.taskRepository.save(task);
     return task;
+  }
+
+  async checkTaskCodeExists(
+    taskCode: string,
+    user: UserEntity,
+  ): Promise<boolean> {
+    try {
+      const task = await this.taskRepository.findOne({
+        where: { taskCode, user: { id: user.id } },
+      });
+      return !!task;
+    } catch (error) {
+      this.logger.error(error);
+      return false;
+    }
   }
 
   async remove(id: string, user: UserEntity): Promise<void> {

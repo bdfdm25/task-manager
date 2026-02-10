@@ -70,13 +70,25 @@ export class TasksController {
     return this.tasksService.findOne(id, user);
   }
 
+  @Get('check-code/:taskCode')
+  @ApiOkResponse({
+    description: 'Check if task code exists',
+    type: Boolean,
+  })
+  checkTaskCodeExists(
+    @Param('taskCode') taskCode: string,
+    @GetUser() user: UserEntity,
+  ): Promise<boolean> {
+    return this.tasksService.checkTaskCodeExists(taskCode, user);
+  }
+
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() taskStatus: UpdateTaskDto,
+    @Body() updateTaskDto: UpdateTaskDto,
     @GetUser() user: UserEntity,
   ): Promise<TaskEntity> {
-    return this.tasksService.update(id, taskStatus.status, user);
+    return this.tasksService.update(id, updateTaskDto, user);
   }
 
   @Delete(':id')

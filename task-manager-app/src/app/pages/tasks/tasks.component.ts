@@ -5,9 +5,11 @@ import { Observable } from 'rxjs';
 import { ITask } from './interfaces/task.interface';
 import { loadTasks } from './store/tasks.actions';
 import {
+  selectDoneTasks,
   selectError,
+  selectInProgressTasks,
   selectLoading,
-  selectTasks,
+  selectOpenTasks,
 } from './store/tasks.selectors';
 
 @Component({
@@ -15,18 +17,21 @@ import {
   templateUrl: './tasks.component.html',
 })
 export class TasksComponent implements OnInit {
-  tasks$: Observable<ITask[]>;
+  openTasks$: Observable<ITask[]>;
+  inProgressTasks$: Observable<ITask[]>;
+  doneTasks$: Observable<ITask[]>;
   loading$: Observable<boolean>;
   error$: Observable<string | undefined>;
 
-  loading: boolean = false;
   username: string = '';
 
   constructor(
     private sessionService: SessionService,
-    private store: Store<{ tasks: ITask[] }>
+    private store: Store<{ tasks: ITask[] }>,
   ) {
-    this.tasks$ = this.store.pipe(select(selectTasks));
+    this.openTasks$ = this.store.pipe(select(selectOpenTasks));
+    this.inProgressTasks$ = this.store.pipe(select(selectInProgressTasks));
+    this.doneTasks$ = this.store.pipe(select(selectDoneTasks));
     this.loading$ = this.store.pipe(select(selectLoading));
     this.error$ = this.store.pipe(select(selectError));
   }

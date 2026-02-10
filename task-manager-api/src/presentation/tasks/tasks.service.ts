@@ -39,10 +39,17 @@ export class TasksService {
 
   async update(
     id: string,
-    status: TaskStatus,
+    updateTaskDto: Partial<TaskDto>,
     user: UserEntity,
   ): Promise<TaskEntity> {
-    return await this.updateTaskUseCase.execute(id, status, user);
+    return await this.updateTaskUseCase.execute(id, updateTaskDto, user);
+  }
+
+  async checkTaskCodeExists(
+    taskCode: string,
+    user: UserEntity,
+  ): Promise<boolean> {
+    return await this.getTaskListUseCase.checkTaskCodeExists(taskCode, user);
   }
 
   async remove(id: string, user: UserEntity): Promise<void> {

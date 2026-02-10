@@ -1,46 +1,106 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-md w-full">
+<div class="p-8">
+  <!-- Title -->
+  <div class="mb-6">
+    <h2 class="text-2xl font-bold text-neutral-dark text-center">
+      Welcome Back
+    </h2>
+    <p class="text-sm text-gray-600 text-center mt-2">
+      Sign in to your account
+    </p>
+  </div>
+
+  <!-- Form -->
+  <form class="space-y-5" [formGroup]="signinForm">
+    <!-- Email Input -->
     <div>
-      <h2 class="text-center text-3xl font-extrabold text-gray-900">
-        sign in to your account
-      </h2>
+      <label
+        for="email-address"
+        class="block text-sm font-medium text-neutral-dark mb-2"
+      >
+        Email
+      </label>
+      <input
+        id="email-address"
+        type="email"
+        autocomplete="email"
+        required
+        formControlName="email"
+        [ngClass]="{
+          'border-danger ring-danger':
+            signinForm.controls['email'].invalid &&
+            signinForm.controls['email'].touched,
+          'border-gray-300 focus:border-secondary focus:ring-secondary': !(
+            signinForm.controls['email'].invalid &&
+            signinForm.controls['email'].touched
+          ),
+        }"
+        class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-colors duration-200"
+        placeholder="Enter your email"
+      />
     </div>
-    <form class="space-y-6" [formGroup]="signinForm">
-      <input type="hidden" name="remember" value="true">
-      <div class="rounded-md shadow-sm">
-        <div>
-          <label for="email-address" class="sr-only">email</label>
-          <input id="email-address" type="email" autocomplete="email" required formControlName="email"
-            [ngClass]="{'border-red-500': signinForm.controls['email'].invalid && signinForm.controls['email'].touched}"
-            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-            placeholder="email address">
-        </div>
-        <div>
-          <label for="password" class="sr-only">password</label>
-          <input id="password" type="password" autocomplete="current-password" required formControlName="password"
-            [ngClass]="{'border-red-500': signinForm.controls['password'].invalid && signinForm.controls['password'].touched}"
-            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-            placeholder="password">
-        </div>
-      </div>
 
-      <small class="text-center text-red-500">{{errMsg}}</small>
+    <!-- Password Input -->
+    <div>
+      <app-password-input
+        id="password"
+        label="Password"
+        placeholder="Enter your password"
+        autocomplete="current-password"
+        formControlName="password"
+        [hasError]="
+          signinForm.controls['password'].invalid &&
+          signinForm.controls['password'].touched
+        "
+      ></app-password-input>
+    </div>
 
-      <div>
-        <button type="button" (click)="onSignin()" [disabled]="loading || signinForm.invalid"
-          [ngClass]="{'bg-gray-300 hover:bg-gray-300': loading || signinForm.invalid}"
-          class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-          <span *ngIf="loading"
-            class="inline-block h-5 w-5 mr-3 animate-spin text-primary-500 rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></span>
-          sign in
-        </button>
-      </div>
-    </form>
-    <div class="flex items-center justify-center">
-      <button type="button" (click)="toggleForm()"
-        class="mt-5 group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-        doesn't have an account yet? sign up
+    <!-- Error Message -->
+    <div
+      *ngIf="errMsg"
+      class="text-center text-sm text-danger bg-danger/10 py-2 px-4 rounded-lg"
+    >
+      {{ errMsg }}
+    </div>
+
+    <!-- Sign In Button -->
+    <div class="pt-2">
+      <button
+        type="button"
+        (click)="onSignin()"
+        [disabled]="loading || signinForm.invalid"
+        [ngClass]="{
+          'bg-gray-300 cursor-not-allowed': loading || signinForm.invalid,
+          'bg-primary hover:bg-primary-dark': !(loading || signinForm.invalid),
+        }"
+        class="w-full flex justify-center items-center py-3 px-4 border border-transparent text-sm font-semibold rounded-lg text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+      >
+        <span
+          *ngIf="loading"
+          class="inline-block h-5 w-5 mr-3 animate-spin rounded-full border-4 border-solid border-white border-r-transparent"
+        ></span>
+        {{ loading ? "Signing in..." : "Sign In" }}
       </button>
     </div>
+  </form>
+
+  <!-- Divider -->
+  <div class="relative my-6">
+    <div class="absolute inset-0 flex items-center">
+      <div class="w-full border-t border-gray-300"></div>
+    </div>
+    <div class="relative flex justify-center text-sm">
+      <span class="px-4 bg-white text-gray-500">Don't have an account?</span>
+    </div>
+  </div>
+
+  <!-- Toggle to Sign Up -->
+  <div>
+    <button
+      type="button"
+      (click)="toggleForm()"
+      class="w-full flex justify-center py-3 px-4 border-2 border-success text-sm font-semibold rounded-lg text-success hover:bg-success hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-success"
+    >
+      Create Account
+    </button>
   </div>
 </div>

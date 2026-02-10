@@ -6,6 +6,7 @@ import { AuthRoutingModule } from './auth-routing.module';
 import { AuthComponent } from './auth.component';
 
 import { CoreModule } from '@app/core/core.module';
+import { ComponentsModule } from '@app/shared/components/components.module';
 import { StoreModule } from '@ngrx/store';
 import { SigninComponent } from './signin/signin.component';
 import { SignupComponent } from './signup/signup.component';
@@ -16,6 +17,7 @@ import { reducer } from './store/auth.reducer';
   imports: [
     CommonModule,
     CoreModule,
+    ComponentsModule,
     AuthRoutingModule,
     FormsModule,
     ReactiveFormsModule,

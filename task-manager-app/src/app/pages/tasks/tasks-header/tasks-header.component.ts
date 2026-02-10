@@ -12,17 +12,28 @@ import { filterTasks, loadTasks } from '../store/tasks.actions';
   templateUrl: './tasks-header.component.html',
 })
 export class TasksHeaderComponent {
+  mobileMenuOpen = false;
+
   constructor(
     private authService: AuthService,
     private router: Router,
     private store: Store,
-    public dialog: MatDialog
+    public dialog: MatDialog,
   ) {}
 
   @Input()
   username!: string;
 
+  toggleMobileMenu(): void {
+    this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
+
+  closeMobileMenu(): void {
+    this.mobileMenuOpen = false;
+  }
+
   addTask() {
+    this.closeMobileMenu();
     this.dialog.open(TaskDetailDialogComponent, {
       data: {
         task: null,
@@ -38,6 +49,7 @@ export class TasksHeaderComponent {
   }
 
   onLogout() {
+    this.closeMobileMenu();
     this.authService.logout();
     this.router.navigate([Pages.LOGIN]);
   }
