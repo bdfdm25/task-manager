@@ -646,20 +646,3 @@ docker exec -it task-manager-postgres psql -U postgres -c "CREATE DATABASE task_
 # Restart API to sync schema
 pnpm run start:dev
 ```
-
----
-
-## 📚 Learning Resources
-
-### Official Documentation
-
-- [NestJS Documentation](https://docs.nestjs.com/)
-- [TypeORM Documentation](https://typeorm.io/)
-- [Passport.js Documentation](http://www.passportjs.org/)
-- [Fastify Documentation](https://www.fastify.io/)
-
-### Related Documentation
-
-- **[Root README](../README.md)** - Full stack setup
-- **[Frontend README](../task-manager-app/README.md)** - Angular app
-- **[Study Guides](../docs/README.md)** - Angular concepts

@@ -452,25 +452,3 @@ npm cache clean --force
 # Increase Node memory
 NODE_OPTIONS=--max_old_space_size=4096 npm run build
 ```
-
----
-
-## 📚 Learning Resources
-
-### Study Guides
-
-This project includes comprehensive Angular study guides:
-
-- **[Master Index](../docs/README.md)** - Complete study guide overview
-- **[Core Concepts](../docs/ANGULAR-CORE-CONCEPTS.md)** - RxJS, NgRx, Change Detection
-- **[Architecture](../docs/ANGULAR-ARCHITECTURE.md)** - Clean Architecture, DI
-- **[Forms & Security](../docs/ANGULAR-FORMS-SECURITY.md)** - Reactive Forms, Validators
-- **[Performance](../docs/ANGULAR-PERFORMANCE.md)** - Optimization techniques
-- **[Quick Reference](../docs/ANGULAR-QUICK-REFERENCE.md)** - Interview cheat sheet
-
-### Official Documentation
-
-- [Angular Documentation](https://angular.io/docs)
-- [NgRx Documentation](https://ngrx.io/)
-- [RxJS Documentation](https://rxjs.dev/)
-- [TailwindCSS Documentation](https://tailwindcss.com/docs)
